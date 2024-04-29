@@ -229,7 +229,9 @@ Before you can use this device, you have to calibrate it. Here is the procedure:
    * You can run the autofocus routine several times, and average the positions obtained to increase accuracy.
    * Enter the steps ratio in the settings dialog of the `DarkSkyGeek’s Filter Wheel Proxy For OAG Focuser` ASCOM device (see screenshot above)
 
-5. **Test**
+**Important note:** Getting a clean AF curve from the guide camera / OAG focuser can be challenging because few stars will be detected. To make this task easier, point your telescope towards a star cluster, and dial in your star detection options.
+
+1. **Test**
 
    Once you have calibrated the OAG Focuser, you can close the second instance of N.I.N.A. and open PHD2. Use the first instance of N.I.N.A. as you normally would, although instead of connecting your filter wheel directly, you will connect to the `DarkSkyGeek’s Filter Wheel Proxy For OAG Focuser` device. Looking at the PHD2 live view, change the filter in the filter wheel and watch the PHD2 live view becoming blurry and then sharp again, automatically! Isn't technology beautiful?!
 
