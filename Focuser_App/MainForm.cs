@@ -97,6 +97,8 @@ namespace ASCOM.DarkSkyGeek.FocuserApp
                 {
                     device.Move(targetPosition);
 
+                    updateUI();
+
                     await waitForDeviceToStopMoving();
 
                     updateUI();

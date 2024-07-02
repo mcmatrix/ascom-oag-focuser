@@ -167,7 +167,7 @@ namespace ASCOM.DarkSkyGeek
                 tl.LogMessage("SupportedActions Get", "Returning [\"SetZeroPosition\"]");
                 return new ArrayList()
                 {
-                    1, "SetZeroPosition"
+                    "SetZeroPosition"
                 };
             }
         }
