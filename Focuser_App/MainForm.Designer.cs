@@ -274,7 +274,7 @@ namespace ASCOM.DarkSkyGeek.FocuserApp
             this.Controls.Add(this.lblCurPos);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
-            this.Text = "DarkSkyGeek’s OAG Focuser";
+            this.Text = "DarkSkyGeek's OAG Focuser";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.picIsMoving)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();

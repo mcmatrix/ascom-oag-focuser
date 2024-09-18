@@ -43,7 +43,7 @@ namespace ASCOM.DarkSkyGeek
         /// <summary>
         /// Driver description that displays in the ASCOM Chooser.
         /// </summary>
-        private static readonly string deviceName = "DarkSkyGeek’s Filter Wheel Proxy For OAG Focuser";
+        private static readonly string deviceName = "DarkSkyGeek's Filter Wheel Proxy For OAG Focuser";
 
         // Constants used for Profile persistence
         internal static int MAX_FILTER_COUNT = 8;
@@ -87,7 +87,7 @@ namespace ASCOM.DarkSkyGeek
         {
             tl = new TraceLogger("", "DarkSkyGeek");
 
-            tl.LogMessage("FilterWheel", "Starting initialization");
+            LogMessage("FilterWheel", "Starting initialization");
 
             ReadProfile();
 
@@ -105,7 +105,7 @@ namespace ASCOM.DarkSkyGeek
 
             connectedState = false;
 
-            tl.LogMessage("FilterWheel", "Completed initialization");
+            LogMessage("FilterWheel", "Completed initialization");
         }
 
         //
@@ -142,7 +142,7 @@ namespace ASCOM.DarkSkyGeek
         {
             get
             {
-                tl.LogMessage("SupportedActions Get", "Returning empty arraylist");
+                LogMessage("SupportedActions Get", "Returning empty arraylist");
                 return new ArrayList();
             }
         }
@@ -187,7 +187,7 @@ namespace ASCOM.DarkSkyGeek
             }
             set
             {
-                tl.LogMessage("Connected", "Set {0}", value);
+                LogMessage("Connected", "Set {0}", value);
                 if (value == IsConnected)
                     return;
 
@@ -236,7 +236,7 @@ namespace ASCOM.DarkSkyGeek
         {
             get
             {
-                tl.LogMessage("Description Get", deviceName);
+                LogMessage("Description Get", deviceName);
                 return deviceName;
             }
         }
@@ -247,7 +247,7 @@ namespace ASCOM.DarkSkyGeek
             {
                 Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
                 string driverInfo = deviceName + " ASCOM Driver Version " + String.Format(CultureInfo.InvariantCulture, "{0}.{1}", version.Major, version.Minor);
-                tl.LogMessage("DriverInfo Get", driverInfo);
+                LogMessage("DriverInfo Get", driverInfo);
                 return driverInfo;
             }
         }
@@ -258,7 +258,7 @@ namespace ASCOM.DarkSkyGeek
             {
                 Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
                 string driverVersion = String.Format(CultureInfo.InvariantCulture, "{0}.{1}", version.Major, version.Minor);
-                tl.LogMessage("DriverVersion Get", driverVersion);
+                LogMessage("DriverVersion Get", driverVersion);
                 return driverVersion;
             }
         }
@@ -276,7 +276,7 @@ namespace ASCOM.DarkSkyGeek
         {
             get
             {
-                tl.LogMessage("Name Get", deviceName);
+                LogMessage("Name Get", deviceName);
                 return deviceName;
             }
         }
@@ -290,7 +290,7 @@ namespace ASCOM.DarkSkyGeek
             get
             {
                 var profile = GetSelectedProfile();
-                tl.LogMessage("FocusOffsets Get", "[ " + String.Join(", ", profile.filterOffsets) + " ]");
+                LogMessage("FocusOffsets Get", "[ " + String.Join(", ", profile.filterOffsets) + " ]");
                 return profile.filterOffsets.ToArray();
             }
         }
@@ -300,7 +300,7 @@ namespace ASCOM.DarkSkyGeek
             get
             {
                 var profile = GetSelectedProfile();
-                tl.LogMessage("Names Get", "[ " + String.Join(", ", profile.filterNames) + " ]");
+                LogMessage("Names Get", "[ " + String.Join(", ", profile.filterNames) + " ]");
                 return profile.filterNames.ToArray();
             }
         }
@@ -326,7 +326,7 @@ namespace ASCOM.DarkSkyGeek
                 }
 
                 var profile = GetSelectedProfile();
-                tl.LogMessage("FilterWheel", $"Using profile {profile.name}");
+                LogMessage("FilterWheel", $"Using profile {profile.name}");
                 short oldPosition = filterWheel.Position;
                 short newPosition = value;
 
@@ -335,7 +335,7 @@ namespace ASCOM.DarkSkyGeek
                 int oldFilterOffset = profile.filterOffsets[oldPosition];
                 int newFilterOffset = profile.filterOffsets[newPosition];
                 int delta = (int) ((newFilterOffset - oldFilterOffset) * profile.stepRatio);
-                tl.LogMessage("FilterWheel", $"oldFilterOffset = {oldFilterOffset}, newFilterOffset = {newFilterOffset}, delta = {delta}");
+                LogMessage("FilterWheel", $"oldFilterOffset = {oldFilterOffset}, newFilterOffset = {newFilterOffset}, delta = {delta}");
                 if (delta > 0)
                 {
                     // If we're moving OUT, we overshoot to deal with backlash...
@@ -481,7 +481,7 @@ namespace ASCOM.DarkSkyGeek
                 }
                 catch (Exception e)
                 {
-                    tl.LogMessage("FilterWheel", "ReadProfile: Exception handled: " + e.Message);
+                    LogMessage("FilterWheel", "ReadProfile: Exception handled: " + e.Message);
                 }
             }
         }

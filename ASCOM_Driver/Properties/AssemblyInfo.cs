@@ -8,10 +8,10 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("ASCOM.DarkSkyGeek.FilterWheel")]
-[assembly: AssemblyDescription("DarkSkyGeek’s OAG Focuser")]
+[assembly: AssemblyDescription("DarkSkyGeek's OAG Focuser")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("DarkSkyGeek’s OAG Focuser")]
+[assembly: AssemblyProduct("DarkSkyGeek's OAG Focuser")]
 [assembly: AssemblyCopyright("Copyright © 2022 - Present, Julien Lecomte - All Rights Reserved")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -34,5 +34,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Revision and Build Numbers
 // by using the '*' as shown below:
 //
-[assembly: AssemblyVersion("1.3.1.0")]
-[assembly: AssemblyFileVersion("1.3.1.0")]
+[assembly: AssemblyVersion("1.3.2.0")]
+[assembly: AssemblyFileVersion("1.3.2.0")]

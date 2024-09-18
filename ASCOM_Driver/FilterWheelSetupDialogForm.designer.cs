@@ -411,7 +411,7 @@ namespace ASCOM.DarkSkyGeek
             this.Name = "FilterWheelSetupDialogForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "DarkSkyGeek’s Filter Wheel Proxy For OAG Focuser";
+            this.Text = "DarkSkyGeek's Filter Wheel Proxy For OAG Focuser";
             this.Load += new System.EventHandler(this.FilterWheelSetupDialogForm_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

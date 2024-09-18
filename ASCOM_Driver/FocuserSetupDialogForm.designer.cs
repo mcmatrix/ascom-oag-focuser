@@ -188,7 +188,7 @@ namespace ASCOM.DarkSkyGeek
             this.Name = "FocuserSetupDialogForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "DarkSkyGeek’s OAG Focuser";
+            this.Text = "DarkSkyGeek's OAG Focuser";
             this.Load += new System.EventHandler(this.FocuserSetupDialogForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.DSGLogo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();

@@ -41,7 +41,7 @@ namespace ASCOM.DarkSkyGeek
         /// <summary>
         /// Driver description that displays in the ASCOM Chooser.
         /// </summary>
-        private static readonly string deviceName = "DarkSkyGeek’s OAG Focuser";
+        private static readonly string deviceName = "DarkSkyGeek's OAG Focuser";
 
         // Constants used for Profile persistence
         internal static string autoDetectComPortProfileName = "Auto-Detect COM Port";
@@ -82,6 +82,11 @@ namespace ASCOM.DarkSkyGeek
         /// Private variable to hold the connected state
         /// </summary>
         private bool connectedState;
+
+        /// <summary>
+        // Object used to synchronize the serial communication with the device in a multi-threaded environment.
+        /// </summary>
+        private readonly object lockObject = new object();
 
         /// <summary>
         // The object used to communicate with the device using serial port communication.
@@ -126,9 +131,9 @@ namespace ASCOM.DarkSkyGeek
         {
             tl = new TraceLogger("", "DarkSkyGeek");
             ReadProfile();
-            tl.LogMessage("Focuser", "Starting initialization");
+            LogMessage("Focuser", "Starting initialization");
             connectedState = false;
-            tl.LogMessage("Focuser", "Completed initialization");
+            LogMessage("Focuser", "Completed initialization");
         }
 
         //
@@ -164,7 +169,7 @@ namespace ASCOM.DarkSkyGeek
         {
             get
             {
-                tl.LogMessage("SupportedActions Get", "Returning [\"SetZeroPosition\"]");
+                LogMessage("SupportedActions Get", "Returning [\"SetZeroPosition\"]");
                 return new ArrayList()
                 {
                     "SetZeroPosition"
@@ -180,7 +185,7 @@ namespace ASCOM.DarkSkyGeek
                     string response = SendCommandToDevice("SetZeroPosition", COMMAND_FOCUSER_SETZEROPOSITION, RESULT_FOCUSER_SETZEROPOSITION);
                     if (response != OK)
                     {
-                        tl.LogMessage("SetZeroPosition", "Device responded with an error");
+                        LogMessage("SetZeroPosition", "Device responded with an error");
                         throw new ASCOM.DriverException("Device responded with an error");
                     }
                     return string.Empty;
@@ -224,7 +229,7 @@ namespace ASCOM.DarkSkyGeek
             }
             set
             {
-                tl.LogMessage("Connected", "Set {0}", value);
+                LogMessage("Connected", "Set {0}", value);
                 if (value == IsConnected)
                     return;
 
@@ -315,7 +320,7 @@ namespace ASCOM.DarkSkyGeek
         {
             get
             {
-                tl.LogMessage("Description Get", deviceName);
+                LogMessage("Description Get", deviceName);
                 return deviceName;
             }
         }
@@ -326,7 +331,7 @@ namespace ASCOM.DarkSkyGeek
             {
                 Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
                 string driverInfo = deviceName + " ASCOM Driver Version " + String.Format(CultureInfo.InvariantCulture, "{0}.{1}", version.Major, version.Minor);
-                tl.LogMessage("DriverInfo Get", driverInfo);
+                LogMessage("DriverInfo Get", driverInfo);
                 return driverInfo;
             }
         }
@@ -337,7 +342,7 @@ namespace ASCOM.DarkSkyGeek
             {
                 Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
                 string driverVersion = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", version.Major, version.Minor);
-                tl.LogMessage("DriverVersion Get", driverVersion);
+                LogMessage("DriverVersion Get", driverVersion);
                 return driverVersion;
             }
         }
@@ -355,7 +360,7 @@ namespace ASCOM.DarkSkyGeek
         {
             get
             {
-                tl.LogMessage("Name Get", deviceName);
+                LogMessage("Name Get", deviceName);
                 return deviceName;
             }
         }
@@ -369,7 +374,7 @@ namespace ASCOM.DarkSkyGeek
         {
             get
             {
-                tl.LogMessage("Absolute Get", true.ToString());
+                LogMessage("Absolute Get", true.ToString());
                 return true;
             }
         }
@@ -389,7 +394,7 @@ namespace ASCOM.DarkSkyGeek
                 string response = SendCommandToDevice("IsMoving", COMMAND_FOCUSER_ISMOVING, RESULT_FOCUSER_ISMOVING);
                 if (response != TRUE && response != FALSE)
                 {
-                    tl.LogMessage("IsMoving", "Invalid response from device: " + response);
+                    LogMessage("IsMoving", "Invalid response from device: " + response);
                     throw new DriverException("Invalid response from device: " + response);
                 }
                 return (response == TRUE);
@@ -401,12 +406,12 @@ namespace ASCOM.DarkSkyGeek
         {
             get
             {
-                tl.LogMessage("Link Get", this.Connected.ToString());
+                LogMessage("Link Get", this.Connected.ToString());
                 return this.Connected;
             }
             set
             {
-                tl.LogMessage("Link Set", value.ToString());
+                LogMessage("Link Set", value.ToString());
                 this.Connected = value;
             }
         }
@@ -416,7 +421,7 @@ namespace ASCOM.DarkSkyGeek
         {
             get
             {
-                tl.LogMessage("MaxIncrement Get", maxPosition.ToString());
+                LogMessage("MaxIncrement Get", maxPosition.ToString());
                 return maxPosition;
             }
         }
@@ -426,7 +431,7 @@ namespace ASCOM.DarkSkyGeek
         {
             get
             {
-                tl.LogMessage("MaxStep Get", maxPosition.ToString());
+                LogMessage("MaxStep Get", maxPosition.ToString());
                 return maxPosition;
             }
         }
@@ -444,7 +449,7 @@ namespace ASCOM.DarkSkyGeek
             string response = SendCommandToDevice("Move", COMMAND_FOCUSER_MOVE + Position.ToString(), RESULT_FOCUSER_MOVE);
             if (response != OK)
             {
-                tl.LogMessage("Move", "Device responded with an error");
+                LogMessage("Move", "Device responded with an error");
                 throw new DriverException("Device responded with an error");
             }
         }
@@ -461,7 +466,7 @@ namespace ASCOM.DarkSkyGeek
                 }
                 catch (FormatException)
                 {
-                    tl.LogMessage("Position", "Invalid position value received from device: " + response);
+                    LogMessage("Position", "Invalid position value received from device: " + response);
                     throw new DriverException("Invalid position value received from device: " + response);
                 }
                 if (reverseRotation)
@@ -476,7 +481,7 @@ namespace ASCOM.DarkSkyGeek
         {
             get
             {
-                tl.LogMessage("StepSize Get", "Not implemented");
+                LogMessage("StepSize Get", "Not implemented");
                 throw new PropertyNotImplementedException("StepSize", false);
             }
         }
@@ -485,12 +490,12 @@ namespace ASCOM.DarkSkyGeek
         {
             get
             {
-                tl.LogMessage("TempComp Get", false.ToString());
+                LogMessage("TempComp Get", false.ToString());
                 return false;
             }
             set
             {
-                tl.LogMessage("TempComp Set", "Not implemented");
+                LogMessage("TempComp Set", "Not implemented");
                 throw new PropertyNotImplementedException("TempComp", false);
             }
         }
@@ -499,7 +504,7 @@ namespace ASCOM.DarkSkyGeek
         {
             get
             {
-                tl.LogMessage("TempCompAvailable Get", false.ToString());
+                LogMessage("TempCompAvailable Get", false.ToString());
                 return false;
             }
         }
@@ -508,7 +513,7 @@ namespace ASCOM.DarkSkyGeek
         {
             get
             {
-                tl.LogMessage("Temperature Get", "Not implemented");
+                LogMessage("Temperature Get", "Not implemented");
                 throw new PropertyNotImplementedException("Temperature", false);
             }
         }
@@ -693,16 +698,21 @@ namespace ASCOM.DarkSkyGeek
             for (int retries = 3; retries >= 0; retries--)
             {
                 string response = "";
-                try
+
+                lock (lockObject)
                 {
-                    serial.Transmit(COMMAND_PING + SEPARATOR);
-                    response = serial.ReceiveTerminated(SEPARATOR).Trim();
+                    try
+                    {
+                        serial.Transmit(COMMAND_PING + SEPARATOR);
+                        response = serial.ReceiveTerminated(SEPARATOR).Trim();
+                    }
+                    catch (Exception)
+                    {
+                        // PortInUse or Timeout exceptions may happen here!
+                        // We ignore them.
+                    }
                 }
-                catch (Exception)
-                {
-                    // PortInUse or Timeout exceptions may happen here!
-                    // We ignore them.
-                }
+
                 if (response == RESULT_PING + DEVICE_GUID)
                 {
                     // Restore default timeout value...
@@ -726,25 +736,34 @@ namespace ASCOM.DarkSkyGeek
         internal string SendCommandToDevice(string identifier, string command, string resultPrefix)
         {
             CheckConnected(identifier);
-            tl.LogMessage(identifier, "Sending command " + command + " to device...");
-            objSerial.Transmit(command + SEPARATOR);
-            tl.LogMessage(identifier, "Waiting for response from device...");
+
             string response;
-            try
+
+            lock (lockObject)
             {
-                response = objSerial.ReceiveTerminated(SEPARATOR).Trim();
+                LogMessage(identifier, "Sending command " + command + " to device...");
+                objSerial.Transmit(command + SEPARATOR);
+                LogMessage(identifier, "Waiting for response from device...");
+
+                try
+                {
+                    response = objSerial.ReceiveTerminated(SEPARATOR).Trim();
+                }
+                catch (Exception e)
+                {
+                    LogMessage(identifier, "Exception: " + e.Message);
+                    throw e;
+                }
             }
-            catch (Exception e)
-            {
-                tl.LogMessage(identifier, "Exception: " + e.Message);
-                throw e;
-            }
-            tl.LogMessage(identifier, "Response from device: " + response);
+
+            LogMessage(identifier, "Response from device: " + response);
+
             if (!response.StartsWith(resultPrefix))
             {
-                tl.LogMessage(identifier, "Invalid response from device: " + response);
+                LogMessage(identifier, "Invalid response from device: " + response);
                 throw new DriverException("Invalid response from device: " + response);
             }
+
             string arg = response.Substring(resultPrefix.Length);
             return arg;
         }
