@@ -12,6 +12,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
@@ -79,6 +80,9 @@ namespace ASCOM.DarkSkyGeek
         /// </summary>
         private DriverAccess.Focuser focuser;
 
+        // Various constants...
+        private const string OK = "OK";
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DarkSkyGeek"/> class.
         /// Must be public for COM registration.
@@ -124,14 +128,14 @@ namespace ASCOM.DarkSkyGeek
         {
             if (IsConnected)
             {
-                System.Windows.Forms.MessageBox.Show("Settings cannot be updated once the device has been connected. Disconnect the device first, so you can update its settings.");
+                MessageBox.Show("Settings cannot be updated once the device has been connected. Disconnect the device first, so you can update its settings.");
                 return;
             }
 
             using (FilterWheelSetupDialogForm F = new FilterWheelSetupDialogForm(this))
             {
                 var result = F.ShowDialog();
-                if (result == System.Windows.Forms.DialogResult.OK)
+                if (result == DialogResult.OK)
                 {
                     WriteProfile(); // Persist device configuration values to the ASCOM Profile store
                 }
@@ -142,15 +146,44 @@ namespace ASCOM.DarkSkyGeek
         {
             get
             {
-                LogMessage("SupportedActions Get", "Returning empty arraylist");
-                return new ArrayList();
+                LogMessage("SupportedActions Get", "Returning [\"GetProfiles\", \"GetCurrentProfile\", \"SetCurrentProfile\"]");
+                return new ArrayList()
+                {
+                    "GetProfiles",
+                    "GetCurrentProfile",
+                    "SetCurrentProfile"
+                };
             }
         }
 
         public string Action(string actionName, string actionParameters)
         {
-            LogMessage("", "Action {0} not implemented", actionName);
-            throw new ActionNotImplementedException("Action " + actionName + " is not implemented by this driver");
+            switch (actionName.ToUpper())
+            {
+                case "GETPROFILES":
+                    return "[" + string.Join(",", profiles.profiles.Select(profile => "\"" + profile.name.Trim().Replace("\\", "\\\\").Replace("\"", "\\\"") + "\"").ToArray()) + "]";
+
+                case "GETCURRENTPROFILE":
+                    return profiles.currentlySelectedProfileName;
+
+                case "SETCURRENTPROFILE":
+                    if (Connected)
+                    {
+                        throw new DriverException("Cannot select a profile while the device is connected!");
+                    }
+                    var profileName = actionParameters;
+                    if (GetProfile(profileName) == null)
+                    {
+                        throw new InvalidValueException("Unknown profile name: " + profileName);
+                    }
+                    profiles.currentlySelectedProfileName = profileName;
+                    WriteProfile();
+                    return OK;
+
+                default:
+                    LogMessage("", "Action {0} not implemented", actionName);
+                    throw new ActionNotImplementedException("Action " + actionName + " is not implemented by this driver");
+            }
         }
 
         public void CommandBlind(string command, bool raw)

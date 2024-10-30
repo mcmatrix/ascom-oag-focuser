@@ -14,6 +14,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace ASCOM.DarkSkyGeek
 {
@@ -153,12 +154,14 @@ namespace ASCOM.DarkSkyGeek
             // consider only showing the setup dialog if not connected
             // or call a different dialog if connected
             if (IsConnected)
-                System.Windows.Forms.MessageBox.Show("Already connected, just press OK");
+            {
+                MessageBox.Show("Already connected, just press OK");
+            }
 
             using (FocuserSetupDialogForm F = new FocuserSetupDialogForm(this))
             {
                 var result = F.ShowDialog();
-                if (result == System.Windows.Forms.DialogResult.OK)
+                if (result == DialogResult.OK)
                 {
                     WriteProfile(); // Persist device configuration values to the ASCOM Profile store
                 }

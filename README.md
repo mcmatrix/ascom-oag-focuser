@@ -16,6 +16,7 @@ I do not charge anything to create and maintain these open-source projects. But 
 - [ASCOM Driver](#ascom-driver)
   * [Downloading And Installing The Driver](#downloading-and-installing-the-driver)
   * [Compiling The Driver (For Developers Only)](#compiling-the-driver-for-developers-only)
+  * [Custom Actions](#custom-actions)
   * [Screenshots](#screenshots)
 - [Standalone Focuser Application](#standalone-focuser-application)
 - [Arduino Firmware](#arduino-firmware)
@@ -106,6 +107,23 @@ Starting with version `1.0.5`, you can install the ASCOM driver, as well as the 
 ### Compiling The Driver (For Developers Only)
 
 Open Microsoft Visual Studio as an administrator (right-click on the Microsoft Visual Studio shortcut, and select "Run as administrator"). This is required because when building the code, by default, Microsoft Visual Studio will register the compiled COM components, and this operation requires special privileges (Note: This is something you can disable in the project settings...) Then, open the solution (`ASCOM_Driver\ASCOM.DarkSkyGeek.OAGFocuser.sln`), change the solution configuration to `Release` (in the toolbar), open the `Build` menu, and click on `Build Solution`. As long as you have properly installed all the required dependencies, the build should succeed and the ASCOM driver will be registered on your system. The binary file generated will be `ASCOM_Driver\bin\Release\ASCOM.DarkSkyGeek.OAGFocuser.dll`. You may also download this file from the [Releases page](https://github.com/jlecomte/ascom-oag-focuser/releases).
+
+### Custom Actions
+
+You can retrieve the list of profiles, retrieve the currently selected profile, or select an existing profile via custom actions exposed by the ASCOM driver. Since a picture is worth a thousand words, check out the following script:
+
+```js
+var device = new ActiveXObject("ASCOM.DarkSkyGeek.FilterWheelProxy");
+device.SetupDialog();
+WScript.StdOut.WriteLine(device.Action('GetProfiles', ''));
+WScript.StdOut.WriteLine(device.Action('GetCurrentProfile', ''));
+WScript.StdOut.WriteLine(device.Action('SetCurrentProfile', 'Askar 151PHQ F/7'));
+WScript.StdIn.ReadLine();
+```
+
+To try it out, save this as `test.js` and execute it using `cscript test.js`.
+
+**Note:** You cannot select a profile (via `SetCurrentProfile`) while the device is connected!
 
 ### Screenshots
 
