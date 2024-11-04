@@ -123,8 +123,6 @@ WScript.StdIn.ReadLine();
 
 To try it out, save this as `test.js` and execute it using `cscript test.js`.
 
-**Note:** You cannot select a profile (via `SetCurrentProfile`) while the device is connected!
-
 ### Screenshots
 
 The ASCOM driver registers two new components: `ASCOM.DarkSkyGeek.FilterWheelProxy`, which implements the `IFilterWheelV2` ASCOM interface, and `ASCOM.DarkSkyGeek.OAGFocuser`, which implements the `IFocuserV3` ASCOM interface. Both components have their own settings dialog. Here is what the filter wheel settings dialog looks like:
